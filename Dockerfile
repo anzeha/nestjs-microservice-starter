@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY package*.json ./
 
+RUN npm i -g @nestjs/cli
+
 RUN npm ci \
     && npm run build \
     && npm prune --production
