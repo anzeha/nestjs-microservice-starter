@@ -1,19 +1,20 @@
 FROM node:14 AS builder
 
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci \
+    && npm run build \
+    && npm prune --production
 
 COPY . .
 
 RUN npm run build
 
 FROM node:14
+
+ENV NODE_ENV production
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
